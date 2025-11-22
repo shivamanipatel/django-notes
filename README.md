@@ -1,80 +1,58 @@
-Django Notes App – CI/CD Project Notes (Direct Copy-Paste)
-🔹 Project Name: Django Notes App
-🔹 Tech Stack: Django, Python 3.10, Jenkins, Docker, Docker Hub, AWS EC2 (Ubuntu)
-✅ 1. Project Overview
-This project deploys a Django Notes App using a fully automated CI/CD pipeline:
+# Django Notes App – CI/CD with Jenkins, Docker & AWS EC2 🚀
 
-Code pushed to GitHub
+A small Django Notes application fully automated using modern DevOps tools: **Jenkins**, **Docker**, **Docker Hub**, and **AWS EC2**.
 
-Jenkins agent pulls the code and builds a Docker image
+---
 
-Image is pushed to Docker Hub
+## 🌐 Live Demo  
+[http://44.196.155.77:8000](http://44.196.155.77:8000)  
+*(Application deployment via CI/CD pipeline)*
 
-EC2 server automatically pulls the latest image and deploys the container
+---
 
-Website runs on EC2 public IP:8000
+## 🧰 Tech Stack  
 
-✅ 2. Pipeline Stages (Jenkinsfile)
-Clone GitHub Repo
+| Component         | Tool/Platform                  |
+|-------------------|-------------------------------|
+| Web Framework     | Django 5 (Python 3.10)        |
+| Containerization  | Docker                        |
+| Image Registry    | Docker Hub (`shivamanipatelpathi/django-notes`) |
+| CI/CD Tool        | Jenkins (Master–Agent on AWS) |
+| Cloud Platform    | AWS EC2 (Ubuntu)              |
+| Version Control   | Git & GitHub                  |
 
-Build Docker Image
+---
 
-Tag Docker Image
+## 🔄 CI/CD Pipeline Overview  
 
-Push Image to Docker Hub
+1. GitHub commit → triggers Jenkins pipeline.  
+2. Jenkins (Agent) builds a Docker image (`django-notes`).  
+3. The image is tagged and pushed to Docker Hub.  
+4. On the AWS EC2 agent node, old container is stopped and removed.  
+5. New container is run (port 8000 exposed) with latest image.  
+6. User accesses the live app publicly via EC2 public IP.
 
-Stop Old Container in EC2
+**Pipeline Stages in `Jenkinsfile`:**  
+- Clone Repo  
+- Build Docker Image  
+- Login to Docker Hub  
+- Push Docker Image  
+- Deploy Container
 
-Run New Container
+---
 
-Auto Deploy
+## 🐳 Quick Start (Run locally)  
 
-✅ 3. Manual Commands Used
-Docker Build & Run
-bash
-Copy code
+```bash
+git clone https://github.com/shivamanipatel/django-notes.git
+cd django-notes
+
+# build docker image
 docker build -t django-notes .
+
+# run container
 docker run -d -p 8000:8000 django-notes
-Docker Push (Jenkins Automated)
-bash
-Copy code
-docker tag django-notes shivamanipatelpathi/django-notes
-docker push shivamanipatelpathi/django-notes
-EC2 Deployment
-bash
-Copy code
-docker stop django-notes || true
-docker rm django-notes || true
-docker pull shivamanipatelpathi/django-notes
-docker run -d -p 8000:8000 --name django-notes shivamanipatelpathi/django-notes
-✅ 4. Django Fixes Applied
-Added EC2 Public IP to ALLOWED_HOSTS
-ini
-Copy code
-ALLOWED_HOSTS = ['44.196.155.77', 'localhost', '127.0.0.1', '*']
-Added Template Support
-ini
-Copy code
-TEMPLATES = [
-    {
-        'DIRS': ['/app/templates'],
-        'APP_DIRS': True,
-    }
-]
-Created home.html
-arduino
-Copy code
-/app/templates/home.html
-✅ 5. Where Everything Runs
-Jenkins Master: 34.198.x.x
 
-Jenkins Agent (Build + Deploy): 44.196.x.x
+# open browser
+http://localhost:8000
 
-Django App: http://44.196.155.77:8000
-
-✅ 6. Docker Hub Link
-Your Docker Image:
-👉 https://hub.docker.com/r/shivamanipatelpathi/django-notes
-
-✅ 7. GitHub Repo
-👉 https://github.com/shivamanipatel/django-notes
